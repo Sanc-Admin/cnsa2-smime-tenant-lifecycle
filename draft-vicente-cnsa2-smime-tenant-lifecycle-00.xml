@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp "&#160;">
+]>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="info"
+     docName="draft-vicente-cnsa2-smime-tenant-lifecycle-00"
+     ipr="trust200902"
+     submissionType="IETF"
+     xml:lang="en"
+     version="3">
+
+  <front>
+    <title abbrev="CNSA 2.0 S/MIME Tenant Lifecycle">CNSA 2.0 S/MIME Tenant Lifecycle Profile</title>
+    <seriesInfo name="Internet-Draft" value="draft-vicente-cnsa2-smime-tenant-lifecycle-00"/>
+
+    <author initials="B." surname="Vicente" fullname="Brian Vicente">
+      <organization>Sanctum SecOps LLC</organization>
+      <address>
+        <postal><city>Pine City</city><region>NY</region><country>United States of America</country></postal>
+        <email>brian@sso-labs.com</email>
+        <uri>https://orcid.org/0009-0006-6395-5308</uri>
+      </address>
+    </author>
+
+    <date year="2026" month="August" day="16"/>
+    <area>Security</area>
+    <workgroup>LAMPS</workgroup>
+    <keyword>CNSA 2.0</keyword>
+    <keyword>S/MIME</keyword>
+    <keyword>tenant</keyword>
+    <keyword>lifecycle</keyword>
+    <keyword>trust store</keyword>
+    <keyword>rotation</keyword>
+
+    <abstract>
+      <t>This document defines a tenant lifecycle profile for S/MIME deployments operating under CNSA 2.0 algorithm requirements. It specifies how a multi-tenant S/MIME environment manages per-tenant trust stores, certificate issuance and rotation, and algorithm compliance across the certificate lifecycle, ensuring that CNSA 2.0 constraints are enforced consistently for each tenant's messaging security configuration.</t>
+    </abstract>
+
+    <note title="Source and Archival" removeInRFC="true">
+      <t>
+        Source for this draft is maintained at
+        <eref target="https://github.com/Sanc-Admin/cnsa2-smime-tenant-lifecycle">https://github.com/Sanc-Admin/cnsa2-smime-tenant-lifecycle</eref>.
+        Author ORCID iD:
+        <eref target="https://orcid.org/0009-0006-6395-5308">https://orcid.org/0009-0006-6395-5308</eref>.
+        Reference implementation and JSON evidence: CygnetLib
+        (<eref target="https://github.com/sanctumsecopsmssp/CygnetLib">https://github.com/sanctumsecopsmssp/CygnetLib</eref>).
+      </t>
+    </note>
+
+    <note title="IPR Considerations" removeInRFC="true">
+      <t>
+        Sanctum IP Co (a Delaware corporation, assignee of Sanctum SecOps LLC) holds or
+        intends to file patent or other intellectual property rights covering subject matter described in this
+        document. By posting this Internet-Draft, the author submits to the IETF Trust the rights described
+        in BCP 78 and BCP 79. All intellectual property described in this document is owned by Sanctum IP Co,
+        128 Dry Run Rd, Pine City, NY 14871. Contact: brian@sso-labs.com.
+      </t>
+    </note>
+
+  </front>
+
+  <middle>
+
+    <section anchor="introduction" numbered="true">
+      <name>Introduction</name>
+      <t>
+        S/MIME <xref target="RFC8551"/> provides message-level security for email and is
+        widely deployed in environments subject to CNSA 2.0. In a multi-tenant messaging
+        environment (e.g., a hosted email provider serving multiple organizations), each
+        tenant has distinct trust stores, certificate authorities, and algorithm policies.
+        This document defines a lifecycle profile that governs per-tenant S/MIME
+        configuration under CNSA 2.0, from certificate issuance through rotation and
+        retirement.
+      </t>
+      <t>
+        This section will describe the multi-tenant S/MIME context and the lifecycle
+        management challenge under CNSA 2.0.
+      </t>
+    </section>
+
+    <section anchor="conventions" numbered="true">
+      <name>Conventions and Definitions</name>
+      <t>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in
+        BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they
+        appear in all capitals as shown here.
+      </t>
+    </section>
+
+    <section anchor="trust-stores" numbered="true">
+      <name>Per-Tenant Trust Stores</name>
+      <t>
+        This section will define the structure and management of per-tenant S/MIME trust
+        stores: how each tenant's set of trusted certificate authorities and trusted
+        public keys is isolated, how CNSA 2.0 algorithm requirements constrain the
+        accepted certificates in a tenant's trust store, and how trust-store updates are
+        versioned and audited.
+      </t>
+    </section>
+
+    <section anchor="issuance-rotation" numbered="true">
+      <name>Certificate Issuance and Rotation</name>
+      <t>
+        This section will specify the certificate lifecycle under CNSA 2.0: issuance
+        requirements (the certificate signature algorithm must be CNSA 2.0-approved),
+        rotation procedures (how a new certificate supersedes an expiring one without
+        message-decryption gaps), and retirement (how expired or revoked certificates are
+        removed from the trust store while preserving the ability to decrypt historical
+        messages).
+      </t>
+    </section>
+
+    <section anchor="algorithm-compliance" numbered="true">
+      <name>Algorithm Compliance Enforcement</name>
+      <t>
+        This section will define how CNSA 2.0 algorithm requirements are enforced across
+        the lifecycle: which signature and key-encapsulation algorithms are permitted for
+        new issuance, how the transition dates in CNSA 2.0 map to lifecycle enforcement
+        actions, and how non-compliant certificates are flagged for rotation.
+      </t>
+    </section>
+
+    <section anchor="security" numbered="true">
+      <name>Security Considerations</name>
+      <t>
+        This section will address threats to the tenant lifecycle: cross-tenant trust-store
+        contamination, stale certificate acceptance, key-escrow and decryption-history
+        requirements, and the integrity of the rotation procedure.
+      </t>
+    </section>
+
+    <section anchor="iana" numbered="true">
+      <name>IANA Considerations</name>
+      <t>
+        This document has no IANA actions.
+      </t>
+    </section>
+
+    <section anchor="acknowledgements" numbered="true">
+      <name>Acknowledgements</name>
+      <t>
+        The author thanks the members of the relevant IETF working groups for their
+        review and feedback. Particular thanks to colleagues at Sanctum SecOps LLC for
+        technical discussion and to the broader IETF community for continued review of
+        post-quantum migration and authorization posture work.
+      </t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+    </references>
+
+    <references title="Informative References">
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8551.xml"/>
+      <reference anchor="CNSA2">
+        <front><title>CNSA 2.0 Cybersecurity Advisory</title>
+        <author><organization>NSA</organization></author>
+        <date year="2022" month="September"/></front>
+      </reference>
+    </references>
+  </back>
+
+</rfc>
